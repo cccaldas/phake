@@ -8,13 +8,24 @@ if(!file_exists($phake_file)){
     exit();
 }
 
-$action = isset($argv[1]) ? $argv[1] : '_default';
+$function_name = isset($argv[1]) ? $argv[1] : '_default';
 
 require_once($phake_file);
+$args = "";
+if(count($argv) > 2) { //arguments
+	for ($i=2; $i < count($argv); $i++) { 
+		$args .= "'".$argv[$i]."'";
+		if($i != count($argv) - 1)
+			$args .= ",";
+	}
+}
 
-if(function_exists($action))
-    eval("$action();");
+$action = $function_name . "(".$args.");";
+//echo $action; echo "\n"; exit();
+
+if(function_exists($function_name))
+    eval($action);
 else
-    echo "task not found: '$action' \n";
+    echo "task not found: '$function_name' \n";
 
 ?>
